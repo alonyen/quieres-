@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorpresa</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #fce4ec, #f8bbd0);
+      font-family:'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow:  0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 400px;
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      color: #c2185b;
+      margin-bottom: 1rem;
+    }
+
+    .button {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1.5rem;
+    }
+
+    button {
+      background:linear-gradient(to right, #eb5a8a, #a99ba0);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #c2185b;
+    }
+
+    .mensaje {
+      margin-top: 20px;
+      color:#6a1b9a;
+      font-size: 1.1rem;
+    }
+
+    .ticket {
+      background: #fff3f6;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow:  0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+      display: none;
+    }
+
+    .ticket h2 {
+      color:  #d81b60;
+    }
+
+    .ticket p {
+      margin: 0.5rem 0;
+      color:  #6a1b9a;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); } 
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="declaracion">
+    <h1> ¿Leyre Quieres salir conmigo?</h1>
+    <div class="button"> 
+      <button onclick="Si()">Si ❤️</button>
+      <button onclick="No()">No 😢</button>
+    </div> 
+    <div class="mensaje" id="mensaje"></div>
+  </div>   
+
+  <div class="ticket" id="ticket">
+    <h1> ¡Muchas gracias!!! ❤️❤️ </h1>
+    <p>Te invito a una cita</p>
+    <p><strong>Lugar :</strong> donde quieras</p>
+    <p><strong>Hora :</strong> a la que quieras</p>
+    <p><strong>Yo pago todo</strong></p>
+  </div>   
+
+  <script>
+    let contador = 0;
+    const declaracion = document.getElementById("declaracion");
+    const ticket = document.getElementById("ticket");
+    const mensaje = document.getElementById("mensaje");
+
+    const webhookURL = "https://discord.com/api/webhooks/1366729280897290401/CW57EDfEj5OuFrqVaNAJqqD15vhzFOd-CqJdOTS1_xX9kNM_nBmAZxpUvDLh80mLlId5";
+
+    function enviarWebhook(respuesta) {
+      fetch(webhookURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content: `Respuesta recibida: ${respuesta}`
+        })
+      }).catch(err => console.error("Error al enviar al webhook:", err));
+    }
+
+    function Si() {
+      declaracion.style.display = 'none';
+      ticket.style.display = 'block';
+      enviarWebhook("Sí ❤️");
+    }
+
+    function No() {
+      contador++;
+      const respuestas = [
+        "¿Por qué no? 😢",
+        "Eres la razón por la que quiero seguir estudiando 😢",
+        "Piensalo bien no te vas arrepentir",
+        "Te necesito a mi lado 😢",
+        "Ya porfa dime que sí 🥺"
+      ];
+      mensaje.textContent = respuestas[Math.min(contador, respuestas.length - 1)];
+      enviarWebhook("No 😢 (intento #" + contador + ")");
+    }
+  </script>
+</body>
+</html>
